@@ -6,4 +6,5 @@ To install the package use
 ```
 library(devtools)
 install_github("JingPan1003/BayesNormTest")
+library(BayesNormTest)
 ```
