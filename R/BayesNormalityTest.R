@@ -3,7 +3,7 @@
 #  This is a Bayesian hypothesis test of normality with local prior of gamma.
 #############################################################################
 ## Arguments:
-  # dat:the dataset for testing
+  # data:the data set for testing
   # m0: the mean of normal distribution for prior of mu
   # s0: the standard deviation of normal distribution for prior of mu
   # a0: the shape parameter of gamma distribution for prior of sigma
@@ -24,7 +24,7 @@ library(twopiece)
 library(numDeriv)
 
 
-BayesNormTestLocal <- function(dat, m0, s0, a0, b0, m0l,s0l,initN,init2L){
+BayesNormTestLocal <- function(data, m0, s0, a0, b0, m0l,s0l,initN,init2L){
   # Normal model
   lpriorn <- function(par){
     mu = par[1]; sigma = exp(par[2])
@@ -47,7 +47,7 @@ BayesNormTestLocal <- function(dat, m0, s0, a0, b0, m0l,s0l,initN,init2L){
   # Log posterior function: normal model
   log_postn <- function(par){
     mu = par[1]; sigma = exp(par[2])
-    ll <- sum(dnorm(dat, mean = mu, sd = sigma, log = TRUE))
+    ll <- sum(dnorm(data, mean = mu, sd = sigma, log = TRUE))
     lprior <- lpriorn(par)
     return(-ll-lprior)
   }
@@ -55,7 +55,7 @@ BayesNormTestLocal <- function(dat, m0, s0, a0, b0, m0l,s0l,initN,init2L){
   # Log posterior function: twopiece normal model + local prior
   log_post2L <- function(par){
     mu = par[1]; sigma = exp(par[2]); skew <- tanh(par[3])
-    ll <- sum( dtp3(dat, mu, sigma, skew, param = "eps", FUN = dnorm, log = TRUE))
+    ll <- sum( dtp3(data, mu, sigma, skew, param = "eps", FUN = dnorm, log = TRUE))
     lprior <- lprior2L(par)
     return(-ll-lprior)
   }
@@ -92,7 +92,7 @@ BayesNormTestLocal <- function(dat, m0, s0, a0, b0, m0l,s0l,initN,init2L){
 #  This is a Bayesian hypothesis test of normality with non-local prior of gamma.
 #############################################################################
 ## Arguments:
-# dat:the data set applied for testing
+# data:the data set applied for testing
 # m0: the mean of normal distribution for prior of mu
 # s0: the standard deviation of normal distribution for prior of mu
 # a0: the shape parameter of gamma distribution for prior of sigma
@@ -106,7 +106,7 @@ BayesNormTestLocal <- function(dat, m0, s0, a0, b0, m0l,s0l,initN,init2L){
 ###############################################################################
 
 
-BayesNormTestNonLocal <- function(dat, m0, s0, a0, b0, m0nl,s0nl,initN,init2NL){
+BayesNormTestNonLocal <- function(data, m0, s0, a0, b0, m0nl,s0nl,initN,init2NL){
   # Normal model
   lpriorn <- function(par){
     mu = par[1]; sigma = exp(par[2])
@@ -130,7 +130,7 @@ BayesNormTestNonLocal <- function(dat, m0, s0, a0, b0, m0nl,s0nl,initN,init2NL){
   # Log posterior function: normal model
   log_postn <- function(par){
     mu = par[1]; sigma = exp(par[2])
-    ll <- sum(dnorm(dat, mean = mu, sd = sigma, log = TRUE))
+    ll <- sum(dnorm(data, mean = mu, sd = sigma, log = TRUE))
     lprior <- lpriorn(par)
     return(-ll-lprior)
   }
@@ -138,7 +138,7 @@ BayesNormTestNonLocal <- function(dat, m0, s0, a0, b0, m0nl,s0nl,initN,init2NL){
   # Log posterior function: twopiece normal model + nonlocal prior
   log_post2NL <- function(par){
     mu = par[1]; sigma = exp(par[2]); skew <- tanh(par[3])
-    ll <- sum( dtp3(dat, mu, sigma, skew, param = "eps", FUN = dnorm, log = TRUE))
+    ll <- sum( dtp3(data, mu, sigma, skew, param = "eps", FUN = dnorm, log = TRUE))
     lprior <- lprior2NL(par)
     return(-ll-lprior)
   }
